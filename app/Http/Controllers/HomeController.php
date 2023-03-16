@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -21,13 +22,20 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('index');
+        if ($request->search) {
+            $articles = Article::where('title', 'like', '%' . $request->search . '%')->orWhere('body', 'like', '%' . $request->search . '%')->paginate(6);
+        } else {
+            $articles = Article::paginate(6);
+        }
+        $count = $articles->count();
+        return view('index', compact('articles', 'count'));
     }
 
     public function show($id)
     {
-        return view('show');
+        $article = Article::findOrFail($id);
+        return view('show', compact('article'));
     }
 }

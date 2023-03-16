@@ -18,8 +18,14 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::middleware('auth')->group(function () {
+});
 
-Route::resource('/categories', CategoryController::class);
+Route::controller(HomeController::class)->group(function () {
+  Route::get('/', 'index')->name('home');
+  Route::get('/{id}', 'show');
+});
 
 Route::resource('/articles', ArticleController::class);
+
+Route::resource('/categories', CategoryController::class);
