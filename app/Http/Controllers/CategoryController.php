@@ -7,9 +7,13 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
+        if ($request->search) {
+            $categories = Category::where('name', 'like', '%' . $request->search . '%')->paginate(5);
+        } else {
+            $categories = Category::paginate(5);
+        }
         $count = $categories->count();
         return view('categories.index', compact('categories', 'count'));
     }

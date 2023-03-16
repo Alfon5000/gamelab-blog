@@ -3,27 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $articles = Article::all();
+        if ($request->search) {
+            $articles = Article::where('title', 'like', '%' . $request->search . '%')->orWhere('body', 'like', '%' . $request->search . '%')->paginate(5);
+        } else {
+            $articles = Article::paginate(5);
+        }
         $count = $articles->count();
         return view('articles.index', compact('articles', 'count'));
     }
 
     public function create()
     {
-        return view('articles.create');
+        $categories = Category::all();
+        return view('articles.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $title = $request->title;
-        $body = $request->title;
-        Article::create(['title' => $title, 'body' => $body]);
+        $body = $request->body;
+        $category_id = $request->category_id;
+        Article::create(['title' => $title, 'body' => $body, 'category_id' => $category_id]);
         return redirect('/articles');
     }
 

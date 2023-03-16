@@ -4,7 +4,14 @@
 
 @section('content')
   <div class="container">
-    <h1 class="mb-3">Categories</h1>
+    <h1 class="mb-3 text-center">Categories</h1>
+    <form action="/categories" method="get">
+      <div class="input-group mb-3 w-50 mx-auto">
+        <input type="text" class="form-control" placeholder="Search Category ..." name="search"
+          value="{{ request('search') }}">
+        <button class="btn btn-outline-primary" type="button">Search</button>
+      </div>
+    </form>
     <a href="/categories/create" class="btn btn-primary mb-3">Create Category</a>
     @if ($count < 1)
       <div class="alert alert-danger" role="alert">
@@ -36,6 +43,7 @@
           @endforeach
         </tbody>
       </table>
+      {{ $categories->links() }}
     @endif
   </div>
 @endsection
