@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\HomeController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,13 +20,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::middleware('auth')->group(function () {
+  Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
+    Route::get('/{id}', 'show');
+  });
+  Route::resource('/articles', ArticleController::class);
+  Route::resource('/categories', CategoryController::class);
 });
-
-Route::controller(HomeController::class)->group(function () {
-  Route::get('/', 'index')->name('home');
-  Route::get('/{id}', 'show');
-});
-
-Route::resource('/articles', ArticleController::class);
-
-Route::resource('/categories', CategoryController::class);
