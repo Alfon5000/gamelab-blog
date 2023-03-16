@@ -26,11 +26,6 @@ class CategoryController extends Controller
         return redirect('/categories');
     }
 
-    public function show(Category $category)
-    {
-        //
-    }
-
     public function edit($id)
     {
         $category = Category::findOrFail($id);
